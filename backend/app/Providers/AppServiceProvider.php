@@ -13,7 +13,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            'App\Domain\FileUpload\FileUploadRepositoryInterface',
+            'App\Domain\FileUpload\FileUploadRepository'
+        );
     }
 
     /**
