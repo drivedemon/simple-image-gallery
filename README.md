@@ -1,6 +1,6 @@
 # Simple Image Gallery System
 
-![Alt Text](https://media.giphy.com/media/12NUbkX6p4xOO4/giphy.gif)
+![Alt Text](https://media.giphy.com/media/3o6Ztl7oraKm4ZJ9mw/giphy.gif)
 
 ## Backend Instructions
 
@@ -60,6 +60,7 @@ Migrate data ( skip this part if you don't want to drop the whole DB )
 ```
 php artisan migrate:fresh
 ```
+Create storage soft link
 ```
 php artisan storage:link
 ```
