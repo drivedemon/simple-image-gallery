@@ -7,7 +7,10 @@ RUN apt-get update -y \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-ADD xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN touch /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "upload_max_filesize = 10M;" >> /usr/local/etc/php/conf.d/uploads.ini
+
+COPY docker/web/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 WORKDIR /app
 COPY . /app

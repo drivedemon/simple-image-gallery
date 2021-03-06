@@ -1,6 +1,8 @@
 <template>
-  <div id="upload">
-    <Upload/>
+  <div class="upload">
+    <div class="container">
+      <file-upload/>
+    </div>
   </div>
 </template>
 
@@ -9,7 +11,9 @@ import Upload from "@/components/Upload";
 
 export default {
   name: 'FileUpload',
-  components: { Upload },
+  components: {
+    'file-upload': Upload
+  },
   data() {
     return {};
   },
@@ -17,7 +21,7 @@ export default {
 </script>
 
 <style scoped>
-#upload {
+.upload {
   background-color: #FFFFFF;
   border: 1px solid #CCCCCC;
   padding: 20px;

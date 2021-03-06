@@ -17,23 +17,27 @@ class SessionsController extends Controller
     public function login(Request $request): JsonResponse
     {
         if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
-            return response()->json(['success' => Auth::user()], 200);
+            return $this->successResponse(['user' => Auth::user()->toArray()]);
         } else {
-            return response()->json(['error' => "Incorrect email or password"], 401);
+            return $this->errorResponse('Incorrect email or password');
         }
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function register(Request $request): JsonResponse
     {
         try {
-            $user = New User();
+            $user = new User();
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->password = bcrypt($request->input('password'));
             $user->save();
-            return response()->json(['success' => $user], 200);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 401);
+            return $this->successResponse(['user' => $user->toArray()]);
+        } catch (Exception $exception) {
+            return $this->errorResponse($exception->getMessage());
         }
     }
 }

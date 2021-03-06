@@ -17,26 +17,20 @@ export default {
   },
   data() {
     return {
-      authenticated: false,
+      defaultPath: ['login', 'register'],
+      authenticated: localStorage.getItem('status') ?? false,
     }
   },
   mounted() {
     if (localStorage.status) {
-      this.$router.replace({name: "upload"});
+      this.$router.replace({name: this.$router.currentRoute.name})
     } else {
-      this.$router.replace({name: "login"});
+      const currentPath = this.defaultPath.find(path => path === this.$router.currentRoute.name)
+      this.$router.replace({name: currentPath ?? 'login'})
     }
   },
 }
 </script>
 
-<style>
-body {
-  background-color: #F0F0F0;
-}
-
-h1 {
-  padding: 0;
-  margin-top: 0;
-}
+<style scoped>
 </style>

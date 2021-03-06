@@ -16,6 +16,11 @@ class FileUpload extends Model
     const FILE_SIZE = 'file_size';
     const FILE_TYPE = 'file_type';
 
+    const ALLOWED_FILE_SIZE = 10485760;
+    const DEFAULT_STORAGE_PATH = 'public/';
+    const EXCEPT_PARAMETERS = ['file', 'validate'];
+    const ALLOWED_FILE_TYPE = ['jpg', 'png'];
+
     /**
      * @var array
      */

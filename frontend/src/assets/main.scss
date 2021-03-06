@@ -1,4 +1,32 @@
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+
 html {
   position: relative;
   min-height: 100%;
+}
+
+body {
+  background-color: #F0F0F0;
+}
+
+h1 {
+  padding: 0;
+  margin-top: 0;
+}
+
+.fa-lg {
+  font-size: 6rem;
+}
+
+.container-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item {
+  flex: 0 0 32%;
+  height: 200px;
+  margin-right: 1%; /* (100-32*3)/2 */
+  margin-bottom: 2%; /* (100-32*3)/2 */
+  position: relative;
 }

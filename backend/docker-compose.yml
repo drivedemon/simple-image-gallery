@@ -12,7 +12,7 @@ services:
       MYSQL_HOST: db-laravel-simple-image-gallery
     volumes:
       - ./:/app
-      - ./xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./docker/web/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
     depends_on:
       - db
 

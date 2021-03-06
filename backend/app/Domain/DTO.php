@@ -37,7 +37,6 @@ class DTO
      */
     public function toArray(): array
     {
-        $tmp = [];
         foreach (get_object_vars($this) as $key => $value) {
             if (null === $value) {
                 continue;

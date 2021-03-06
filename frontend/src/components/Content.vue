@@ -1,14 +1,10 @@
 <template>
-  <router-view/>
+  <router-view :key="$route.fullPath"/>
 </template>
 
 <script>
 export default {
   name: 'Content',
-  data() {
-    return {
-      authenticated: this.authenticated,
-    }
-  },
+  data: () => ({ authenticated: localStorage.status }),
 }
 </script>

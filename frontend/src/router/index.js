@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import LoginComponent from "@/views/Login";
 import UploadComponent from "@/views/FileUpload";
 import DashboardComponent from "@/views/Dashboard";
+import RegisterComponent from "@/views/Register";
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
         path: "/upload",
         name: "upload",
         component: UploadComponent
+    },
+    {
+        path: "/register",
+        name: "register",
+        component: RegisterComponent
     }
 ]
 
