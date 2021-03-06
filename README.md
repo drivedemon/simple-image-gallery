@@ -53,9 +53,6 @@ Access docker container
 ```
 docker exec -it backend_web_1 bash
 ```
-```
-cd backend
-```
 Migrate data ( skip this part if you don't want to drop the whole DB )
 ```
 php artisan migrate:fresh
@@ -80,10 +77,3 @@ Run a server
 yarn serve
 ```
 You should see the frontend web up and running on `localhost:8080`
-
-When have some update unless controller please clear cache for make sure code already update: 
-```
-php artisan cache:clear
-php artisan view:clear
-php artisan config:clear
-```
