@@ -88,7 +88,7 @@ class FileUploadService
             return $payload;
         }
 
-        if (!self::allowedFileSize($payload->getFile()->getMaxFilesize())) {
+        if (self::allowedFileSize($payload->getFile()->getSize())) {
             return $payload;
         }
 
@@ -110,7 +110,7 @@ class FileUploadService
      */
     public function allowedFileSize(int $fileSize): bool
     {
-        return ($this->allowedFileSize > $fileSize);
+        return ($fileSize > $this->allowedFileSize);
     }
 
     /**

@@ -77,7 +77,6 @@ export default {
     callbackSuccess(file, response) {
       this.tempAttachments.map(attachment => {
         if (attachment.title === file.name) {
-          attachment.imageId = response.file_upload.id
           attachment.fileResponse = response.file_upload
           if (response.file_upload.file_path) {
             attachment.filePath = `${API_URL.baseUrl}${response.file_upload.file_path}`

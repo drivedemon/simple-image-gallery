@@ -6,12 +6,12 @@
           <h1 v-if="checkProgress(tempAttachment)" class="upload-progress text-center">
             {{ `${tempAttachment.progress} %` }}
           </h1>
-          <img v-else-if="checkFilePath(tempAttachment.filePath)" class="image w-100" style="height: 200px;" :src="tempAttachment.fileResponse.filePath">
-          <div v-else class="text-center image">
-            <i class="fa fa-exclamation-triangle fa-lg mb-2 upload-progress text-center" style="color:#B22222;" aria-hidden="true"></i>
-            <p class="text-danger">{{ `${fileValidation(tempAttachment.fileResponse)} - ${tempAttachment.fileResponse.file_name}` }}</p>
+          <img v-if="checkFilePath(tempAttachment.filePath)" class="image w-100" style="height: 200px;" :src="tempAttachment.filePath">
+          <div v-if="!checkFilePath(tempAttachment.filePath)" class="text-center image">
+            <i v-if="!checkProgress(tempAttachment) && tempAttachment.fileResponse" class="fa fa-exclamation-triangle fa-lg mb-2 upload-progress text-center" style="color:#B22222;" aria-hidden="true"></i>
+            <p class="text-danger">{{ fileValidation(tempAttachment.fileResponse) }}</p>
           </div>
-          <div class="middle">
+          <div v-if="tempAttachment.fileResponse" class="middle">
             <b-button v-if="checkFilePath(tempAttachment.filePath)" class="btn btn-sm btn-primary mr-1" @click="$bvModal.show(tempAttachment.fileResponse.id)">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                    viewBox="0 0 16 16">
@@ -29,10 +29,10 @@
               </svg>
             </button>
           </div>
+          <b-modal v-if="checkFilePath(tempAttachment.filePath)" :id="tempAttachment.fileResponse.id" no-close-on-esc hide-footer>
+            <img :src="tempAttachment.filePath">
+          </b-modal>
         </div>
-        <b-modal :id="tempAttachment.fileResponse.id" no-close-on-esc hide-footer>
-          <img :src="tempAttachment.fileResponse.file_path">
-        </b-modal>
       </li>
 
       <li class="item" v-for="image in images" :key="image.id">
@@ -61,7 +61,7 @@
             </button>
           </div>
         </div>
-        <b-modal :id="image.id" no-close-on-esc hide-footer>
+        <b-modal :id="image.id" hide-header hide-footer>
           <img :src="image.file_path">
         </b-modal>
       </li>
@@ -90,8 +90,9 @@ export default {
   },
   methods: {
     fileValidation(image) {
-      if (!this.allowedType.includes(image.file_extension)) return 'File type not support'
-      if (this.allowedSize < image.file_size) return 'File size exceeded'
+      if (image === null) return
+      if (!this.allowedType.includes(image.file_extension)) return `File type not support - ${image.file_name}`
+      if (this.allowedSize < image.file_size) return `File size exceeded - ${image.file_name}`
     },
     checkFilePath(filePath) {
       return filePath !== null
@@ -143,6 +144,7 @@ li {
 
 .image {
   opacity: 1;
+  border-radius: 8px;
   display: block;
   width: 100%;
   height: auto;
