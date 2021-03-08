@@ -6,7 +6,6 @@ use App\Domain\FileUpload\FileUploadDTO;
 use App\Domain\FileUpload\FileUploadService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class FileUploadsController extends Controller
@@ -64,5 +63,24 @@ class FileUploadsController extends Controller
         return $this->successResponse(
             ['file_upload' => $this->fileUploadService->getOwnInformation($id)]
         );
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function delete(int $id): JsonResponse
+    {
+        $fileUpload = $this->fileUploadService->findFileUploadById($id);
+
+        if (null === $fileUpload) {
+            return $this->errorResponse('file_upload_not_found', [], 404);
+        }
+
+        if ($this->fileUploadService->deleteImage($fileUpload)) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse('unknown_error');
     }
 }

@@ -18,14 +18,17 @@
 </template>
 
 <script>
-import  API_URL from '@/services/api'
+import API_URL from '@/services/api'
 import vueDropzone from "vue2-dropzone"
 import AttachmentList from "@/components/AttachmentList"
+import uploadService from "@/services/uploadService";
 
 export default {
   data: () => ({
+    userId: localStorage.getItem('user'),
     tempAttachments: [],
     attachments: [],
+    images: [],
     config: {
       url: API_URL.upload,
       previewsContainer: false,
@@ -55,12 +58,13 @@ export default {
       attachment.thumb = file.dataURL;
       attachment.thumb_list = file.dataURL;
       attachment.isLoading = true;
-      attachment.progress = null;
+      attachment.progress = 0;
       attachment.filePath = null;
+      attachment.fileResponse = null;
       attachment.size = file.size;
       this.tempAttachments = [...this.tempAttachments, attachment];
     },
-    sendingParams (file, xhr, formData) {
+    sendingParams(file, xhr, formData) {
       formData.append('userId', localStorage.getItem('user'));
     },
     uploadProgress(file, progress) {
@@ -73,10 +77,19 @@ export default {
     callbackSuccess(file, response) {
       this.tempAttachments.map(attachment => {
         if (attachment.title === file.name) {
-          const filePath = response.file_upload.file_path
-          attachment.filePath = `${API_URL.baseUrl}${filePath}`
+          attachment.imageId = response.file_upload.id
+          attachment.fileResponse = response.file_upload
+          if (response.file_upload.file_path) {
+            attachment.filePath = `${API_URL.baseUrl}${response.file_upload.file_path}`
+          }
         }
       });
+    },
+    async fetchImages() {
+      await uploadService.fetch(this.userId)
+          .then(response => {
+            this.images = response.data.file_upload
+          })
     },
   },
 };

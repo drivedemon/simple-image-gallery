@@ -11,6 +11,9 @@ const uploadService = {
     upload: (data) => {
         return Axios.post(API_URL.upload, data);
     },
+    delete: (imageId) => {
+        return Axios.delete(`${API_URL.delete}/${imageId}`);
+    },
 };
 
 export default uploadService;

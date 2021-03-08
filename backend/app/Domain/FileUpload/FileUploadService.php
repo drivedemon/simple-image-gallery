@@ -6,7 +6,7 @@ use App\Models\FileUpload;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-use stdClass;
+use Illuminate\Support\Str;
 
 class FileUploadService
 {
@@ -84,12 +84,15 @@ class FileUploadService
      */
     public function validate(FileUploadDTO $payload): FileUploadDTO
     {
-        if (self::allowedFileExtension($payload->getFile()->getClientOriginalExtension()) ||
-            self::allowedFileSize($payload->getFile()->getMaxFilesize())) {
-            return $payload->setValidate(true);
+        if (!self::allowedFileExtension($payload->getFile()->getClientOriginalExtension())) {
+            return $payload;
         }
 
-        return $payload;
+        if (!self::allowedFileSize($payload->getFile()->getMaxFilesize())) {
+            return $payload;
+        }
+
+        return $payload->setValidate(true);
     }
 
     /**
@@ -107,7 +110,7 @@ class FileUploadService
      */
     public function allowedFileSize(int $fileSize): bool
     {
-        return ($fileSize < $this->allowedFileSize);
+        return ($this->allowedFileSize > $fileSize);
     }
 
     /**
@@ -125,19 +128,19 @@ class FileUploadService
      */
     public function getOwnInformation(int $userId): array
     {
-        $information = self::getOwnFileUpload($userId)->whereNotNull('file_path');
+        $information = self::getOwnFileUpload($userId)->whereNotNull(FileUpload::FILE_PATH);
 
         if ($information->isEmpty()) {
             return [];
         }
 
         $totalFile = $information->count();
-        $totalSize = $information->sum('file_size');
-        $fileType = $information->pluck( 'file_type', 'file_extension');
-        $totalFileType = $information->pluck('file_extension')->countBy();
+        $totalSize = $information->sum(FileUpload::FILE_SIZE);
+        $fileType = $information->pluck( FileUpload::FILE_TYPE, FileUpload::FILE_EXTENSION);
+        $totalFileType = $information->pluck(FileUpload::FILE_EXTENSION)->countBy();
         $totalMimeType = [];
         foreach ($totalFileType as $type => $countFile) {
-            $totalMimeType[$type] = $information->where('file_extension', $type)->sum('file_size');
+            $totalMimeType[$type] = $information->where(FileUpload::FILE_EXTENSION, $type)->sum(FileUpload::FILE_SIZE);
         }
 
         return [
@@ -147,5 +150,29 @@ class FileUploadService
             'total_file_type' => $totalFileType,
             'total_mime_type' => $totalMimeType
         ];
+    }
+
+    /**
+     * @param FileUpload $fileUpload
+     * @return bool
+     *
+     */
+    public function deleteImage(FileUpload $fileUpload): bool
+    {
+        if (null !== $fileUpload->file_path) {
+            Storage::delete((string) Str::of($fileUpload->file_path)->replace('/storage/',  $this->defaultPath));
+        }
+
+        return $this->repository->deleteImage($fileUpload);
+    }
+
+    /**
+     * @param int $fileUploadId
+     * @return FileUpload|null
+
+     */
+    public function findFileUploadById(int $fileUploadId): ?FileUpload
+    {
+        return $this->repository->findFileUploadById($fileUploadId);
     }
 }

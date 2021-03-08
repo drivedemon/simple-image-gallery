@@ -54,16 +54,6 @@
         <h1 v-else>No data</h1>
       </div>
     </div>
-
-<!--    <ul class="container-content" v-if="totalFile > 0">-->
-<!--      <li class="item" v-for="tempAttachment in tempAttachments" :key="tempAttachment._id">-->
-<!--        <img :src="item.image">-->
-<!--        <span class="uploaded-date"> {{ tempAttachment.size }} bytes </span>-->
-<!--        <span v-if="checkProgress(tempAttachment)" class="upload-progress">-->
-<!--          {{ `${tempAttachment.progress} %` }}-->
-<!--        </span>-->
-<!--      </li>-->
-<!--    </ul>-->
   </div>
 </template>
 

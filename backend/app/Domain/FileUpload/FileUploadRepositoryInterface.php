@@ -22,4 +22,16 @@ interface FileUploadRepositoryInterface
      * @return Collection
      */
     public function getFileUploadByUserId(int $userId): Collection;
+
+    /**
+     * @param fileUpload $fileUpload
+     * @return bool
+     */
+    public function deleteImage(fileUpload $fileUpload): bool;
+
+    /**
+     * @param int $fileUploadId
+     * @return FileUpload|null
+     */
+    public function findFileUploadById(int $fileUploadId): ?FileUpload;
 }

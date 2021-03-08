@@ -8,6 +8,7 @@ const API_URL = {
     login: `${BASE_API_URL}/login`,
     register: `${BASE_API_URL}/register`,
     upload: `${BASE_API_URL}/upload`,
+    delete: `${BASE_API_URL}/delete`,
 }
 
 export default API_URL;

@@ -3,6 +3,8 @@
 namespace App\Domain\FileUpload;
 
 use App\Models\FileUpload;
+use Exception;
+use Faker\Provider\File;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -26,6 +28,25 @@ class FileUploadRepository implements FileUploadRepositoryInterface
      */
     public function getFileUploadByUserId(int $userId): Collection
     {
-        return FileUpload::whereUserId($userId)->get();
+        return FileUpload::whereUserId($userId)->orderBy(FileUpload::ID, 'DESC')->get();
+    }
+
+    /**
+     * @param FileUpload $fileUpload
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteImage(FileUpload $fileUpload): bool
+    {
+        return $fileUpload->delete();
+    }
+
+    /**
+     * @param int $fileUploadId
+     * @return FileUpload|null
+     */
+    public function findFileUploadById(int $fileUploadId): ?FileUpload
+    {
+        return FileUpload::find($fileUploadId);
     }
 }

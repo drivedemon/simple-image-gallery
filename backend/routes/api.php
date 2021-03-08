@@ -26,4 +26,6 @@ Route::post('register', [SessionsController::class, 'register'])->name('register
 Route::post('upload', [FileUploadsController::class, 'upload'])->name('upload');
 Route::get('fetch/{id}', [FileUploadsController::class, 'fetch'])->name('fetch');
 Route::get('information/{id}', [FileUploadsController::class, 'information'])->name('information');
+Route::delete('delete/{id}', [FileUploadsController::class, 'delete'])->name('delete');
+
 

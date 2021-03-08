@@ -9,6 +9,7 @@ class FileUpload extends Model
 {
     use HasFactory;
 
+    const ID = 'id';
     const USER_ID = 'user_id';
     const FILE_PATH = 'file_path';
     const FILE_NAME = 'file_name';
