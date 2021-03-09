@@ -105,14 +105,6 @@ class FileUploadDTO extends DTO
     }
 
     /**
-     * @return string|null
-     */
-    public function getCreatedAt(): ?string
-    {
-        return $this->createdAt;
-    }
-
-    /**
      * @param string $extension
      * @return FileUploadDTO
      */
