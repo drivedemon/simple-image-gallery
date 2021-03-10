@@ -10,6 +10,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class FileUploadServiceTest extends TestCase
@@ -67,7 +69,7 @@ class FileUploadServiceTest extends TestCase
     /**
      * @test
      */
-    public function shouldCreatedFileUpload()
+    public function shouldCreateFileUpload()
     {
         $request = app('request')->merge(['file' => $this->generalFile, 'user_id' => $this->user->id]);
         $fileUpload = FileUpload::factory()->create();
@@ -85,7 +87,51 @@ class FileUploadServiceTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetFileUploaded()
+    public function shouldStoreFileUpload()
+    {
+        $request = app('request')->merge(['file' => $this->generalFile, 'user_id' => $this->user->id]);
+        $payload = new FileUploadDTO($request);
+
+        $service = $this->getService($this->getRepository());
+        $response = $service->uploadFileStorage($payload->setValidate(true));
+        $filePath = (string) Str::of($response->getFilePath())->replace('/storage/',  '/');
+        Storage::disk('public')->assertExists($filePath);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldDeleteFileUpload()
+    {
+        $request = app('request')->merge(['file' => $this->generalFile, 'user_id' => $this->user->id]);
+        $pathName = "{$this->user->id}/{$this->zipFile->hashName()}";
+        $fileUpload = FileUpload::factory()->create();
+
+        $repository = $this->getRepository();
+        $repository->expects($this->once())
+            ->method('createFileUpload')
+            ->willReturn($fileUpload);
+
+        $service = $this->getService($repository);
+        $response = $service->createFileUpload(new FileUploadDTO($request));
+        $this->assertInstanceOf(FileUpload::class, $response);
+
+
+        $repository = $this->getRepository();
+        $repository->expects($this->once())
+            ->method('deleteImage')
+            ->willReturn(true);
+
+        $service = $this->getService($repository);
+        $response = $service->deleteImage($response);
+        Storage::disk('public')->assertMissing($pathName);
+        $this->assertTrue($response);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGetFileUpload()
     {
         $fileUploaded = FileUpload::factory()->create();
         $fileUpload = FileUpload::find($fileUploaded->id);
@@ -103,7 +149,7 @@ class FileUploadServiceTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetEmptyFileUploaded()
+    public function shouldGetEmptyFileUpload()
     {
         $fileUpload = FileUpload::find(1);
 

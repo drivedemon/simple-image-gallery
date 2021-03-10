@@ -95,6 +95,14 @@ class FileUploadDTO extends DTO
     }
 
     /**
+     * @return string
+     */
+    public function getFilePath(): string
+    {
+        return $this->filePath;
+    }
+
+    /**
      * @param string $filePath
      * @return FileUploadDTO
      */
