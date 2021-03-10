@@ -2,21 +2,15 @@
 
 namespace Tests\Unit\FileUpload;
 
-use App\Domain\FileUpload\FileUploadRepositoryInterface;
-use App\Domain\FileUpload\FileUploadService;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
 
 class FileUploadTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var Collection|Model|mixed
      */
@@ -36,7 +30,7 @@ class FileUploadTest extends TestCase
     /**
      * @var string
      */
-    private $baseUri;
+    private $baseApi;
     /**
      * @var UploadedFile
      */
@@ -46,7 +40,7 @@ class FileUploadTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->create();
-        $this->baseUri = '/api/upload';
+        $this->baseApi = '/api';
         $this->params = [
             'user_id' => $this->user->id
         ];
@@ -77,23 +71,6 @@ class FileUploadTest extends TestCase
     }
 
     /**
-     * @param $repository
-     * @return FileUploadService
-     */
-    protected function getService($repository): FileUploadService
-    {
-        return new FileUploadService($repository);
-    }
-
-    /**
-     * @return FileUploadRepositoryInterface|MockObject
-     */
-    protected function getRepository()
-    {
-        return $this->createMock(FileUploadRepositoryInterface::class);
-    }
-
-    /**
      * @test
      */
     public function shouldStoreFile()
@@ -101,7 +78,7 @@ class FileUploadTest extends TestCase
         $pathName = "{$this->user->id}/{$this->generalFile->hashName()}";
         $response = $this->call(
             'POST',
-            $this->baseUri,
+            "{$this->baseApi}/upload",
             $this->params,
             [],
             ['file' => $this->generalFile]
@@ -126,7 +103,7 @@ class FileUploadTest extends TestCase
         $pathName = "{$this->user->id}/{$this->extraSizeFile->hashName()}";
         $response = $this->call(
             'POST',
-            $this->baseUri,
+            "{$this->baseApi}/upload",
             $this->params,
             [],
             ['file' => $this->extraSizeFile]
@@ -155,7 +132,7 @@ class FileUploadTest extends TestCase
         $pathName = "{$this->user->id}/{$this->zipFile->hashName()}";
         $response = $this->call(
             'POST',
-            $this->baseUri,
+            "{$this->baseApi}/upload",
             $this->params,
             [],
             ['file' => $this->zipFile]
@@ -174,5 +151,20 @@ class FileUploadTest extends TestCase
             ]
         ]);
         Storage::disk('public')->assertMissing($pathName);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGetOwnInformation()
+    {
+        $response = $this->call(
+            'GET',
+            "{$this->baseApi}/fetch/{$this->user->id}",
+        );
+
+        $response->assertOk();
+        $response->assertJson(['is_request_success' => true]);
+        $response->assertJsonCount(0, 'file_upload');
     }
 }

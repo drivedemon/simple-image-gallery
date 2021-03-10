@@ -4,7 +4,6 @@ namespace App\Domain\FileUpload;
 
 use App\Models\FileUpload;
 use Exception;
-use Faker\Provider\File;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
