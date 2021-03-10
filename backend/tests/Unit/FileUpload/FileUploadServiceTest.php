@@ -85,6 +85,41 @@ class FileUploadServiceTest extends TestCase
     /**
      * @test
      */
+    public function shouldGetFileUploaded()
+    {
+        $fileUploaded = FileUpload::factory()->create();
+        $fileUpload = FileUpload::find($fileUploaded->id);
+
+        $repository = $this->getRepository();
+        $repository->expects($this->once())
+            ->method('findFileUploadById')
+            ->willReturn($fileUpload);
+
+        $service = $this->getService($repository);
+        $response = $service->findFileUploadById($fileUpload->user_id);
+        $this->assertInstanceOf(FileUpload::class, $response);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGetEmptyFileUploaded()
+    {
+        $fileUpload = FileUpload::find(1);
+
+        $repository = $this->getRepository();
+        $repository->expects($this->once())
+            ->method('findFileUploadById')
+            ->willReturn($fileUpload);
+
+        $service = $this->getService($repository);
+        $response = $service->findFileUploadById(1);
+        $this->assertEmpty($response);
+    }
+
+    /**
+     * @test
+     */
     public function shouldGetEmptyInformation()
     {
         $collection = FileUpload::whereUserId($this->user->id)->get();
