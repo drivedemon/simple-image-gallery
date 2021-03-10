@@ -40,7 +40,7 @@ class FileUploadsController extends Controller
 
         DB::commit();
 
-        return $this->successResponse(['file_upload' => $fileUpload->toArray()]);
+        return $this->successResponse([$this->fileUploadService->getResponseKey() => $fileUpload->toArray()]);
     }
 
     /**
@@ -50,7 +50,7 @@ class FileUploadsController extends Controller
     public function fetch(int $id): JsonResponse
     {
         return $this->successResponse(
-            ['file_upload' => $this->fileUploadService->getOwnFileUpload($id)]
+            [$this->fileUploadService->getResponseKey() => $this->fileUploadService->getOwnFileUpload($id)]
         );
     }
 
@@ -61,7 +61,7 @@ class FileUploadsController extends Controller
     public function information(int $id): JsonResponse
     {
         return $this->successResponse(
-            ['file_upload' => $this->fileUploadService->getOwnInformation($id)]
+            [$this->fileUploadService->getResponseKey() => $this->fileUploadService->getOwnInformation($id)]
         );
     }
 

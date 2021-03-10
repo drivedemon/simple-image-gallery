@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class FileUpload extends Model
 {
@@ -33,4 +34,12 @@ class FileUpload extends Model
         self::FILE_SIZE,
         self::FILE_TYPE,
     ];
+
+    /**
+     * @return string
+     */
+    public function scopeTest(): string
+    {
+        return Str::snake(class_basename($this));
+    }
 }

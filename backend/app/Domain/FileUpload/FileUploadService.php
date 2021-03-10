@@ -175,4 +175,12 @@ class FileUploadService
     {
         return $this->repository->findFileUploadById($fileUploadId);
     }
+
+    /**
+     * @return string
+     */
+    public function getResponseKey(): string
+    {
+        return Str::snake(class_basename(FileUpload::class));
+    }
 }
