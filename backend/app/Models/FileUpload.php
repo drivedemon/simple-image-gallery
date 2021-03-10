@@ -34,12 +34,4 @@ class FileUpload extends Model
         self::FILE_SIZE,
         self::FILE_TYPE,
     ];
-
-    /**
-     * @return string
-     */
-    public function scopeTest(): string
-    {
-        return Str::snake(class_basename($this));
-    }
 }
