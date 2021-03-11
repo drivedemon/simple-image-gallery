@@ -15,7 +15,7 @@
           <tbody>
           <tr>
             <td>Total Size:</td>
-            <td>{{ `${formatBytes(totalSize)}(${totalSize})B` }}</td>
+            <td>{{ `${formatBytes(totalSize)}(${Number(totalSize).toLocaleString()})B` }}</td>
           </tr>
           <tr>
             <td>No of files:</td>
@@ -42,12 +42,12 @@
           <tr v-if="fileType.jpg">
             <td>{{ fileType.jpg }}</td>
             <td>{{ totalFileType.jpg }}</td>
-            <td>{{ `${formatBytes(totalMimeType.jpg)}(${totalMimeType.jpg})B` }}</td>
+            <td>{{ `${formatBytes(totalMimeType.jpg)}(${Number(totalMimeType.jpg).toLocaleString()})B` }}</td>
           </tr>
           <tr v-if="fileType.png">
             <td>{{ fileType.png }}</td>
             <td>{{ totalFileType.png }}</td>
-            <td>{{ `${formatBytes(totalMimeType.png)}(${totalMimeType.png})B` }}</td>
+            <td>{{ `${formatBytes(totalMimeType.png)}(${Number(totalMimeType.png).toLocaleString()})B` }}</td>
           </tr>
           </tbody>
         </table>

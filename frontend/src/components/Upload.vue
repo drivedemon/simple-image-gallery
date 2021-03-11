@@ -65,7 +65,7 @@ export default {
       this.tempAttachments = [...this.tempAttachments, attachment];
     },
     sendingParams(file, xhr, formData) {
-      formData.append('userId', localStorage.getItem('user'));
+      formData.append('user_id', localStorage.getItem('user'));
     },
     uploadProgress(file, progress) {
       this.tempAttachments.map(attachment => {
