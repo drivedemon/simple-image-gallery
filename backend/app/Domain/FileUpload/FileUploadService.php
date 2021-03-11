@@ -115,15 +115,6 @@ class FileUploadService
 
     /**
      * @param int $userId
-     * @return Collection
-     */
-    public function getOwnFileUpload(int $userId): Collection
-    {
-        return $this->repository->getFileUploadByUserId($userId);
-    }
-
-    /**
-     * @param int $userId
      * @return array
      */
     public function getOwnInformation(int $userId): array
@@ -136,7 +127,7 @@ class FileUploadService
 
         $totalFile = $information->count();
         $totalSize = $information->sum(FileUpload::FILE_SIZE);
-        $fileType = $information->pluck( FileUpload::FILE_TYPE, FileUpload::FILE_EXTENSION);
+        $fileType = $information->pluck(FileUpload::FILE_TYPE, FileUpload::FILE_EXTENSION);
         $totalFileType = $information->pluck(FileUpload::FILE_EXTENSION)->countBy();
         $totalMimeType = [];
         foreach ($totalFileType as $type => $countFile) {
@@ -153,6 +144,15 @@ class FileUploadService
     }
 
     /**
+     * @param int $userId
+     * @return Collection
+     */
+    public function getOwnFileUpload(int $userId): Collection
+    {
+        return $this->repository->getFileUploadByUserId($userId);
+    }
+
+    /**
      * @param FileUpload $fileUpload
      * @return bool
      *
@@ -160,7 +160,7 @@ class FileUploadService
     public function deleteImage(FileUpload $fileUpload): bool
     {
         if (null !== $fileUpload->file_path) {
-            Storage::delete((string) Str::of($fileUpload->file_path)->replace('/storage/',  $this->defaultPath));
+            Storage::delete((string)Str::of($fileUpload->file_path)->replace('/storage/', $this->defaultPath));
         }
 
         return $this->repository->deleteImage($fileUpload);
@@ -169,7 +169,6 @@ class FileUploadService
     /**
      * @param int $fileUploadId
      * @return FileUpload|null
-
      */
     public function findFileUploadById(int $fileUploadId): ?FileUpload
     {

@@ -53,7 +53,7 @@ class FileUploadTest extends TestCase
             true
         );
         $this->extraSizeFile = new UploadedFile(
-            __DIR__.'/Images/image20mb.jpg',
+            __DIR__ . '/Images/image20mb.jpg',
             'image20mb.jpg',
             'image/jpeg',
             null,
@@ -61,7 +61,7 @@ class FileUploadTest extends TestCase
             true
         );
         $this->zipFile = new UploadedFile(
-            __DIR__.'/Images/example.zip',
+            __DIR__ . '/Images/example.zip',
             'example.zip',
             'application/zip',
             null,
@@ -86,12 +86,14 @@ class FileUploadTest extends TestCase
 
         $response->assertOk();
         $response->assertJson(['is_request_success' => true]);
-        $response->assertJson([
-            'file_upload' => [
-                'file_path' => "/storage/{$pathName}",
-                'file_extension' => $this->generalFile->clientExtension()
+        $response->assertJson(
+            [
+                'file_upload' => [
+                    'file_path' => "/storage/{$pathName}",
+                    'file_extension' => $this->generalFile->clientExtension()
+                ]
             ]
-        ]);
+        );
         Storage::disk('public')->assertExists($pathName);
     }
 
@@ -111,16 +113,20 @@ class FileUploadTest extends TestCase
 
         $response->assertOk();
         $response->assertJson(['is_request_success' => true]);
-        $response->assertJsonMissing([
-            'file_upload' => [
-                'file_path' => "/storage/{$pathName}",
+        $response->assertJsonMissing(
+            [
+                'file_upload' => [
+                    'file_path' => "/storage/{$pathName}",
+                ]
             ]
-        ]);
-        $response->assertJson([
-            'file_upload' => [
-                'file_extension' => $this->extraSizeFile->clientExtension()
+        );
+        $response->assertJson(
+            [
+                'file_upload' => [
+                    'file_extension' => $this->extraSizeFile->clientExtension()
+                ]
             ]
-        ]);
+        );
         Storage::disk('public')->assertMissing($pathName);
     }
 
@@ -140,16 +146,20 @@ class FileUploadTest extends TestCase
 
         $response->assertOk();
         $response->assertJson(['is_request_success' => true]);
-        $response->assertJsonMissing([
-            'file_upload' => [
-                'file_path' => "/storage/{$pathName}",
+        $response->assertJsonMissing(
+            [
+                'file_upload' => [
+                    'file_path' => "/storage/{$pathName}",
+                ]
             ]
-        ]);
-        $response->assertJson([
-            'file_upload' => [
-                'file_extension' => $this->zipFile->clientExtension()
+        );
+        $response->assertJson(
+            [
+                'file_upload' => [
+                    'file_extension' => $this->zipFile->clientExtension()
+                ]
             ]
-        ]);
+        );
         Storage::disk('public')->assertMissing($pathName);
     }
 
